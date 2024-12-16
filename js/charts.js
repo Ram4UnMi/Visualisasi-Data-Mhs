@@ -72,6 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     lineChart.render();
 
+    // Add line chart analysis
+    const lineChartAnalysis = document.getElementById('lineChartAnalysis');
+    const avgNilaiAkhir = calculateStats(data.nilai_akhir).avg;
+    const maxNilaiAkhir = Math.max(...data.nilai_akhir);
+    const minNilaiAkhir = Math.min(...data.nilai_akhir);
+    const passCount = data.nilai_akhir.filter(n => n >= 55).length;
+    const passPercentage = ((passCount / data.nilai_akhir.length) * 100).toFixed(1);
+
+    lineChartAnalysis.innerHTML = `
+        <p>• Rata-rata nilai akhir kelas adalah ${avgNilaiAkhir}, dengan nilai tertinggi ${maxNilaiAkhir} dan terendah ${minNilaiAkhir}.</p>
+        <p>• ${passCount} dari ${data.nilai_akhir.length} mahasiswa (${passPercentage}%) mencapai nilai kelulusan minimal (≥55).</p>
+        <p>• Terdapat kesenjangan nilai yang signifikan antara mahasiswa dengan performa tertinggi dan terendah.</p>
+    `;
+
     // Bar Chart
     const barChart = new ApexCharts(document.querySelector("#barChart"), {
         ...darkTheme,
@@ -106,6 +120,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     barChart.render();
+
+    // Add bar chart analysis
+    const barChartAnalysis = document.getElementById('barChartAnalysis');
+    const avgKuis = calculateStats(data.kuis).avg;
+    const avgTugas = calculateStats(data.tugas).avg;
+    const avgUTS = calculateStats(data.uts).avg;
+    const avgUAS = calculateStats(data.uas).avg;
+
+    barChartAnalysis.innerHTML = `
+        <p>• Rata-rata nilai komponen: Kuis (${avgKuis}), Tugas (${avgTugas}), UTS (${avgUTS}), UAS (${avgUAS}).</p>
+        <p>• Komponen ${getHighestComponent()} menunjukkan performa terbaik secara keseluruhan.</p>
+        <p>• Komponen ${getLowestComponent()} memerlukan perhatian khusus untuk peningkatan.</p>
+    `;
 
     // Initialize student select
     const studentSelect = document.getElementById('studentSelect');
@@ -146,6 +173,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         radarChart.render();
+
+        // Update radar chart analysis
+        const radarChartAnalysis = document.getElementById('radarChartAnalysis');
+        const studentNIM = data.nim[index];
+        const studentKuis = data.kuis[index];
+        const studentTugas = data.tugas[index];
+        const studentUTS = data.uts[index];
+        const studentUAS = data.uas[index];
+        const studentNilaiAkhir = data.nilai_akhir[index];
+
+        const compareToAvg = (value, avg) => value >= avg ? 'di atas' : 'di bawah';
+        
+        radarChartAnalysis.innerHTML = `
+            <p>• Mahasiswa (${studentNIM}) memperoleh nilai akhir ${studentNilaiAkhir}.</p>
+            <p>• Nilai Kuis (${studentKuis}) ${compareToAvg(studentKuis, avgKuis)} rata-rata kelas (${avgKuis}).</p>
+            <p>• Nilai Tugas (${studentTugas}) ${compareToAvg(studentTugas, avgTugas)} rata-rata kelas (${avgTugas}).</p>
+            <p>• Nilai UTS (${studentUTS}) ${compareToAvg(studentUTS, avgUTS)} rata-rata kelas (${avgUTS}).</p>
+            <p>• Nilai UAS (${studentUAS}) ${compareToAvg(studentUAS, avgUAS)} rata-rata kelas (${avgUAS}).</p>
+        `;
     });
 
     // Update statistics
@@ -226,4 +272,26 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         studentTableBody.appendChild(row);
     });
+
+    // Helper function to get component with highest average
+    function getHighestComponent() {
+        const components = {
+            'Kuis': calculateStats(data.kuis).avg,
+            'Tugas': calculateStats(data.tugas).avg,
+            'UTS': calculateStats(data.uts).avg,
+            'UAS': calculateStats(data.uas).avg
+        };
+        return Object.entries(components).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+    }
+
+    // Helper function to get component with lowest average
+    function getLowestComponent() {
+        const components = {
+            'Kuis': calculateStats(data.kuis).avg,
+            'Tugas': calculateStats(data.tugas).avg,
+            'UTS': calculateStats(data.uts).avg,
+            'UAS': calculateStats(data.uas).avg
+        };
+        return Object.entries(components).reduce((a, b) => a[1] < b[1] ? a : b)[0];
+    }
 });
