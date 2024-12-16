@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Nilai Mahasiswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        .chart-container {
+            min-height: 400px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            'bg': '#1a1a1a',
+                            'card': '#2d2d2d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-bg text-gray-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <h1 class="text-3xl font-bold text-gray-100 mb-8">Dashboard Nilai Mahasiswa</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Line Chart -->
+            <div class="bg-dark-card p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Gambaran Performa Mahasiswa</h2>
+                <div id="lineChart" class="chart-container"></div>
+                <div class="mt-4 text-gray-300 text-sm">
+                    <div id="lineChartAnalysis" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="bg-dark-card p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Distribusi Nilai</h2>
+                <div id="barChart" class="chart-container"></div>
+                <div class="mt-4 text-gray-300 text-sm">
+                    <div id="barChartAnalysis" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="bg-dark-card p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Statistik Kelas</h2>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-dark-bg p-4 rounded-lg text-center">
+                        <div class="text-gray-400 text-sm mb-1">Total Mahasiswa</div>
+                        <div id="totalStudents" class="text-2xl font-bold text-gray-200">-</div>
+                    </div>
+                    <div class="bg-dark-bg p-4 rounded-lg text-center">
+                        <div class="text-gray-400 text-sm mb-1">Rata-rata Kelas</div>
+                        <div id="classAverage" class="text-2xl font-bold text-gray-200">-</div>
+                    </div>
+                </div>
+                <div id="statsContainer" class="space-y-4"></div>
+            </div>
+
+            <!-- Radar Chart -->
+            <div class="bg-dark-card p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Analisis Mahasiswa Individual</h2>
+                <select id="studentSelect" class="mb-4 p-2 border rounded bg-dark-bg text-gray-200 border-gray-700 w-full">
+                    <option value="">Pilih Mahasiswa</option>
+                </select>
+                <div id="radarChart" class="chart-container"></div>
+                <div class="mt-4 text-gray-300 text-sm">
+                    <div id="radarChartAnalysis" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Data Table -->
+        <div class="max-w-6xl mx-auto bg-dark-card p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Data Detail Mahasiswa</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-dark-bg border-b border-gray-700">
+                        <tr>
+                            <th class="p-3 text-gray-200">NIM</th>
+                            <th class="p-3 text-gray-200">Kuis</th>
+                            <th class="p-3 text-gray-200">Tugas</th>
+                            <th class="p-3 text-gray-200">UTS</th>
+                            <th class="p-3 text-gray-200">UAS</th>
+                            <th class="p-3 text-gray-200">Nilai Akhir</th>
+                            <th class="p-3 text-gray-200">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody" class="divide-y divide-gray-700"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-card py-6 border-t border-gray-700 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-gray-400 text-sm">Nama</span>
+                        <span class="text-gray-200 font-semibold">Rama Hadi Nugraha</span>
+                    </div>
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-gray-400 text-sm">NIM</span>
+                        <span class="text-gray-200 font-semibold">10122087</span>
+                    </div>
+                    <div class="flex flex-col items-center space-y-2">
+                        <span class="text-gray-400 text-sm">Mata Kuliah</span>
+                        <span class="text-gray-200 font-semibold">Kecerdasan Bisnis dan Visualisasi Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>
